@@ -1,0 +1,35 @@
+Entorno/
+.env.example
+start_servers.bat
+start_servers.ps1
+# Cachés y artefactos de Python
+__pycache__/
+__init__.py
+*.py[cod]
+
+# Bases de datos locales
+*.db
+*.sqlite*
+
+# Archivos/dirs del servidor y cliente (no versionar)
+server.py
+client.py
+
+server_storage/
+WEB_INTERFACE_README.md
+
+# Configuración local del editor
+.vscode/
+
+
+# Variables de entorno locales
+.env
+
+media/
+venv/
+pedidos/migrations/
+productos/migrations/
+main.js
+
+
+

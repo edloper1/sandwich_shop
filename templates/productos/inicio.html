@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} - BugHunter Shop{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="fade-in-up">Los Mejores Sándwiches de la Ciudad</h1>
+                <p class="fade-in-up">Ingredientes frescos, sabores únicos y preparación artesanal. Descubre nuestra deliciosa selección de sándwiches gourmet.</p>
+                <div class="fade-in-up">
+                    <a href="{% url 'productos:catalogo' %}" class="btn btn-primary btn-lg me-3">Ver Catálogo</a>
+                    <a href="#destacados" class="btn btn-outline-light btn-lg">Productos Destacados</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    {% if productos_destacados.first.imagen %}
+                        <img src="{{ productos_destacados.first.imagen.url }}" alt="Sandwich destacado" class="img-fluid rounded shadow" style="max-height: 400px;">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categorías -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Nuestras Categorías</h2>
+            <p class="text-muted">Explora nuestra variedad de deliciosos sándwiches</p>
+        </div>
+        <div class="row justify-content-center">
+            {% for categoria in categorias %}
+            <div class="col-auto mb-3">
+                <a href="{% url 'productos:categoria' categoria.slug %}" class="categoria-badge">
+                    {{ categoria.nombre }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Productos Destacados -->
+<section id="destacados" class="productos-destacados">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Productos Destacados</h2>
+            <p class="text-muted">Nuestras especialidades más populares</p>
+        </div>
+        
+        {% if productos_destacados %}
+        <div class="row">
+            {% for producto in productos_destacados %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card producto-card h-100">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text text-muted flex-grow-1">{{ producto.descripcion|truncatewords:15 }}</p>
+                        
+                        {% if producto.ingredientes %}
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="bi bi-list-ul"></i> 
+                                {{ producto.ingredientes|truncatewords:5 }}
+                            </small>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="precio">${{ producto.precio }}</span>
+                            <small class="text-muted">
+                                <i class="bi bi-clock"></i> {{ producto.tiempo_preparacion }} min
+                            </small>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <a href="{{ producto.get_absolute_url }}" class="btn btn-outline-primary btn-sm me-2">Ver Detalles</a>
+                            
+                            <form method="post" action="{% url 'carrito:agregar_al_carrito' producto.id %}" class="d-inline form-agregar-carrito">
+                                {% csrf_token %}
+                                <input type="hidden" name="cantidad" value="1">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-cart-plus"></i> Agregar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'productos:catalogo' %}" class="btn btn-primary btn-lg">Ver Todos los Productos</a>
+        </div>
+        {% else %}
+        <div class="text-center">
+            <p class="text-muted">No hay productos destacados disponibles en este momento.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Características -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 text-center mb-4">
+                <div class="mb-3">
+                    <i class="bi bi-heart-fill text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <h5>Ingredientes Frescos</h5>
+                <p class="text-muted">Seleccionamos cuidadosamente los mejores ingredientes para garantizar calidad y sabor en cada bocado.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="mb-3">
+                    <i class="bi bi-clock-fill text-primary" style="font-size: 3rem;"></i>
+                </div>
+                <h5>Preparación Rápida</h5>
+                <p class="text-muted">Preparamos tu pedido en tiempo récord sin comprometer la calidad. La mayoría listos en 15 minutos.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <div class="mb-3">
+                    <i class="bi bi-truck text-success" style="font-size: 3rem;"></i>
+                </div>
+                <h5>Delivery Gratis</h5>
+                <p class="text-muted">Entregamos tu pedido donde estés. Delivery gratuito en pedidos mayores a $25.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

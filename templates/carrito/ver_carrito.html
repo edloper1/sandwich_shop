@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} - BugHunter Shop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="fw-bold mb-4">
+                <i class="bi bi-cart3"></i> {{ titulo }}
+            </h1>
+        </div>
+    </div>
+
+    {% if items %}
+    <div class="row">
+        <!-- Items del carrito -->
+        <div class="col-lg-8">
+            {% for item in items %}
+            <div class="card carrito-item">
+                <div class="row g-0">
+                    <!-- Imagen del producto -->
+                    <div class="col-md-3">
+                        {% if item.producto.imagen %}
+                            <img src="{{ item.producto.imagen.url }}" 
+                                 class="img-fluid h-100 w-100" 
+                                 alt="{{ item.producto.nombre }}"
+                                 style="object-fit: cover;">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                                <i class="bi bi-image text-muted" style="font-size: 2rem;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Información del producto -->
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="card-title">{{ item.producto.nombre }}</h5>
+                                    <p class="card-text text-muted small">
+                                        {{ item.producto.descripcion|truncatewords:15 }}
+                                    </p>
+                                    
+                                    {% if item.notas %}
+                                    <div class="alert alert-info py-2 small">
+                                        <i class="bi bi-info-circle"></i> 
+                                        <strong>Notas:</strong> {{ item.notas }}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <small class="text-muted">
+                                        <i class="bi bi-tag"></i> {{ item.producto.categoria.nombre }}
+                                    </small>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <!-- Precio unitario -->
+                                    <div class="mb-2">
+                                        <span class="text-muted">Precio unitario: </span>
+                                        <span class="precio-unitario fw-bold">${{ item.precio_unitario }}</span>
+                                    </div>
+                                    
+                                    <!-- Cantidad -->
+                                    <div class="mb-3">
+                                        <label class="form-label small">Cantidad:</label>
+                                        <form method="post" 
+                                              action="{% url 'carrito:actualizar_cantidad' item.id %}" 
+                                              class="d-inline">
+                                            {% csrf_token %}
+                                            <div class="input-group" style="max-width: 120px;">
+                                                <button class="btn btn-outline-secondary btn-sm btn-cantidad" 
+                                                        type="button" 
+                                                        data-accion="decrementar">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+                                                <input type="number" 
+                                                       class="form-control form-control-sm text-center cantidad-input" 
+                                                       name="cantidad" 
+                                                       value="{{ item.cantidad }}" 
+                                                       min="1" 
+                                                       data-item-id="{{ item.id }}">
+                                                <button class="btn btn-outline-secondary btn-sm btn-cantidad" 
+                                                        type="button" 
+                                                        data-accion="incrementar">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Total del item -->
+                                    <div class="mb-3">
+                                        <span class="text-muted">Subtotal: </span>
+                                        <span class="total-item h6 text-success">${{ item.total_precio }}</span>
+                                    </div>
+                                    
+                                    <!-- Acciones -->
+                                    <div class="btn-group-vertical w-100">
+                                        <a href="{{ item.producto.get_absolute_url }}" 
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-eye"></i> Ver producto
+                                        </a>
+                                        <a href="{% url 'carrito:eliminar_del_carrito' item.id %}" 
+                                           class="btn btn-outline-danger btn-sm btn-eliminar-item">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <!-- Acciones del carrito -->
+            <div class="mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <a href="{% url 'productos:catalogo' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Seguir Comprando
+                        </a>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="{% url 'carrito:vaciar_carrito' %}" 
+                           class="btn btn-outline-danger"
+                           onclick="return confirm('¿Estás seguro de que quieres vaciar el carrito?')">
+                            <i class="bi bi-trash"></i> Vaciar Carrito
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resumen del carrito -->
+        <div class="col-lg-4">
+            <div class="resumen-pedido sticky-top" style="top: 100px;">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-receipt"></i> Resumen del Pedido
+                </h5>
+                
+                <!-- Detalles del resumen -->
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Productos ({{ carrito.total_items }})</span>
+                        <span id="subtotal">${{ carrito.total_precio }}</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery</span>
+                        <span id="costo-delivery">Gratis</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between fw-bold h5">
+                        <span>Total</span>
+                        <span id="total-final" class="text-success">${{ carrito.total_precio }}</span>
+                    </div>
+                </div>
+                
+                <!-- Información de delivery -->
+                <div class="alert alert-info small">
+                    <i class="bi bi-info-circle"></i>
+                    Delivery gratuito en pedidos mayores a $25
+                </div>
+                
+                <!-- Botón de checkout -->
+                <div class="d-grid">
+                    <a href="{% url 'pedidos:checkout' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-credit-card"></i> Proceder al Pago
+                    </a>
+                </div>
+                
+                <!-- Métodos de pago aceptados -->
+                <div class="mt-3 text-center">
+                    <small class="text-muted">Aceptamos:</small>
+                    <div class="mt-2">
+                        <i class="bi bi-credit-card text-primary me-2" style="font-size: 1.5rem;"></i>
+                        <i class="bi bi-paypal text-primary me-2" style="font-size: 1.5rem;"></i>
+                        <i class="bi bi-cash text-success" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+                
+                <!-- Tiempo estimado -->
+                <div class="mt-3 p-3 bg-light rounded">
+                    <div class="text-center">
+                        <i class="bi bi-clock text-primary" style="font-size: 1.5rem;"></i>
+                        <div class="mt-2">
+                            <small class="text-muted">Tiempo estimado de preparación:</small>
+                            <div class="fw-bold">15-25 minutos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- Carrito vacío -->
+    <div class="text-center py-5">
+        <i class="bi bi-cart-x text-muted" style="font-size: 5rem;"></i>
+        <h3 class="mt-3">Tu carrito está vacío</h3>
+        <p class="text-muted">¡Agrega algunos deliciosos sándwiches para comenzar!</p>
+        <a href="{% url 'productos:catalogo' %}" class="btn btn-primary btn-lg">
+            <i class="bi bi-shop"></i> Explorar Productos
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

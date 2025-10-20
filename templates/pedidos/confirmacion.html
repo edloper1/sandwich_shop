@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} - BugHunter Shop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Confirmación exitosa -->
+            <div class="text-center mb-4">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                </div>
+                <h1 class="fw-bold text-success">¡Pedido Confirmado!</h1>
+                <p class="text-muted">Tu pedido ha sido recibido y está siendo preparado</p>
+            </div>
+
+            <!-- Información del pedido -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-receipt"></i> 
+                        Pedido #{{ pedido.numero_corto }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-person"></i> Información del Cliente</h6>
+                            <p class="mb-1"><strong>Nombre:</strong> {{ pedido.nombre_cliente }}</p>
+                            <p class="mb-1"><strong>Email:</strong> {{ pedido.email_cliente }}</p>
+                            <p class="mb-3"><strong>Teléfono:</strong> {{ pedido.telefono_cliente }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-truck"></i> Información de Entrega</h6>
+                            <p class="mb-1">
+                                <span class="badge bg-primary">{{ pedido.get_tipo_entrega_display }}</span>
+                            </p>
+                            {% if pedido.direccion_entrega %}
+                            <p class="mb-1"><strong>Dirección:</strong></p>
+                            <p class="text-muted">{{ pedido.direccion_entrega }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items del pedido -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-list-ul"></i> Productos Pedidos</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in pedido.items.all %}
+                    <div class="d-flex justify-content-between align-items-center py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div>
+                            <strong>{{ item.producto.nombre }}</strong>
+                            <small class="text-muted d-block">
+                                {{ item.cantidad }} x ${{ item.precio_unitario }}
+                            </small>
+                            {% if item.notas %}
+                            <small class="text-info">
+                                <i class="bi bi-info-circle"></i> {{ item.notas }}
+                            </small>
+                            {% endif %}
+                        </div>
+                        <span class="fw-bold">${{ item.total_precio }}</span>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <strong>Subtotal:</strong>
+                        </div>
+                        <div class="col-6 text-end">
+                            ${{ pedido.subtotal }}
+                        </div>
+                    </div>
+                    {% if pedido.costo_delivery > 0 %}
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Delivery:</strong>
+                        </div>
+                        <div class="col-6 text-end">
+                            ${{ pedido.costo_delivery }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5><strong>Total:</strong></h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h5 class="text-success"><strong>${{ pedido.total }}</strong></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado del pedido -->
+            <div class="estado-pedido">
+                <h6><i class="bi bi-clock-history"></i> Estado del Pedido</h6>
+                <div class="d-flex align-items-center mb-3">
+                    <span class="estado-badge estado-{{ pedido.estado }}">
+                        {{ pedido.get_estado_display }}
+                    </span>
+                    <small class="text-muted ms-3">
+                        Pedido realizado: {{ pedido.fecha_pedido|date:"d/m/Y H:i" }}
+                    </small>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Tiempo estimado de preparación:</strong> 15-25 minutos
+                </div>
+            </div>
+
+            <!-- Notas del cliente -->
+            {% if pedido.notas_cliente %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-chat-text"></i> Notas Especiales</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">{{ pedido.notas_cliente }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Acciones -->
+            <div class="text-center">
+                <a href="{% url 'pedidos:seguimiento' pedido.numero_pedido %}" 
+                   class="btn btn-primary me-3">
+                    <i class="bi bi-search"></i> Seguir Pedido
+                </a>
+                <a href="{% url 'productos:inicio' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-house"></i> Volver al Inicio
+                </a>
+            </div>
+
+            <!-- Información de contacto -->
+            <div class="mt-4 p-3 bg-light rounded text-center">
+                <h6><i class="bi bi-telephone"></i> ¿Necesitas ayuda?</h6>
+                <p class="mb-0">
+                    Contáctanos al <strong>+1 234 567 890</strong> o 
+                    <strong>info@sandwichshop.com</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

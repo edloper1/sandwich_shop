@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ titulo }} - BugHunter Shop{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="fw-bold mb-4">
+                <i class="bi bi-credit-card"></i> {{ titulo }}
+            </h1>
+            
+            <!-- Resumen del pedido -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-cart-check"></i> Resumen del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in items %}
+                    <div class="d-flex justify-content-between align-items-center py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div>
+                            <strong>{{ item.producto.nombre }}</strong>
+                            <small class="text-muted d-block">Cantidad: {{ item.cantidad }}</small>
+                            {% if item.notas %}
+                            <small class="text-info"><i class="bi bi-info-circle"></i> {{ item.notas }}</small>
+                            {% endif %}
+                        </div>
+                        <span class="fw-bold">${{ item.total_precio }}</span>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <strong>Subtotal:</strong>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span id="subtotal-checkout">${{ carrito.total_precio }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Delivery:</strong>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span id="costo-delivery-checkout">$0.00</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5><strong>Total:</strong></h5>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h5 class="text-success"><strong id="total-checkout">${{ carrito.total_precio }}</strong></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de checkout -->
+            <div class="checkout-section">
+                <h5 class="fw-bold mb-3">Información de Entrega</h5>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    {% crispy form %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deliveryRadios = document.querySelectorAll('input[name="tipo_entrega"]');
+    const direccionField = document.getElementById('id_direccion_entrega').closest('.form-group');
+    
+    function toggleDireccion() {
+        const tipoEntrega = document.querySelector('input[name="tipo_entrega"]:checked').value;
+        const subtotal = parseFloat(document.getElementById('subtotal-checkout').textContent.replace('$', ''));
+        
+        if (tipoEntrega === 'delivery') {
+            direccionField.style.display = 'block';
+            document.getElementById('id_direccion_entrega').required = true;
+            document.getElementById('costo-delivery-checkout').textContent = '$5.00';
+            document.getElementById('total-checkout').textContent = '$' + (subtotal + 5.00).toFixed(2);
+        } else {
+            direccionField.style.display = 'none';
+            document.getElementById('id_direccion_entrega').required = false;
+            document.getElementById('costo-delivery-checkout').textContent = '$0.00';
+            document.getElementById('total-checkout').textContent = '$' + subtotal.toFixed(2);
+        }
+    }
+    
+    deliveryRadios.forEach(radio => {
+        radio.addEventListener('change', toggleDireccion);
+    });
+    
+    // Inicializar
+    toggleDireccion();
+});
+</script>
+{% endblock %}

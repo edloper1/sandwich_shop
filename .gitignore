@@ -1,35 +1,51 @@
+# Entornos virtuales de Python
+venv/
+env/
 Entorno/
-.env.example
-start_servers.bat
-start_servers.ps1
+
 # Cachés y artefactos de Python
 __pycache__/
-__init__.py
 *.py[cod]
+*$py.class
+*.so
 
 # Bases de datos locales
 *.db
 *.sqlite*
+db.sqlite3
 
-# Archivos/dirs del servidor y cliente (no versionar)
-server.py
-client.py
-
-server_storage/
-WEB_INTERFACE_README.md
-
-# Configuración local del editor
-.vscode/
-
-
-# Variables de entorno locales
+# Variables de entorno
 .env
+.env.local
+.env.*.local
 
+# Archivos de configuración del editor
+.vscode/
+.idea/
+
+# Archivos estáticos compilados
+staticfiles/
+staticfiles_build/
+
+# Archivos de media (desarrollo)
 media/
-venv/
-pedidos/migrations/
-productos/migrations/
-main.js
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Node modules (si usas npm)
+node_modules/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel
 
 
 

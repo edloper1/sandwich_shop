@@ -4,13 +4,9 @@
     {
       "src": "sandwich_shop/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-    },
-    {
-      "src": "build_files.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles_build/static"
+      "config": { 
+        "maxLambdaSize": "15mb", 
+        "runtime": "python3.12"
       }
     }
   ],
@@ -23,5 +19,8 @@
       "src": "/(.*)",
       "dest": "sandwich_shop/wsgi.py"
     }
-  ]
+  ],
+  "env": {
+    "PYTHONPATH": "$PYTHONPATH:/var/task"
+  }
 }

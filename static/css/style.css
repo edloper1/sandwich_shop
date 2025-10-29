@@ -395,6 +395,45 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
+.resumen-pedido-header {
+    background: linear-gradient(45deg, var(--color-primary), var(--color-terra));
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    padding: 12px 20px;
+}
+
+/* Banner de confirmación de pedido */
+.pedido-confirmado-banner {
+    padding: 20px 0 10px 0;
+    color: var(--text-on-dark);
+}
+
+.pedido-confirmado-icon {
+    color: var(--color-mustard);
+    text-shadow: 0 4px 18px rgba(92,58,33,0.25);
+}
+
+.pedido-confirmado-title {
+    color: var(--color-primary);
+}
+
+/* Cabecera que muestra el número de pedido */
+.pedido-number-bar {
+    background: linear-gradient(90deg, var(--color-primary), var(--color-terra));
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 12px 18px;
+}
+
+/* Badge del tipo de entrega coherente con la paleta */
+.badge-pedido-type {
+    background: linear-gradient(45deg, var(--color-mustard), var(--color-orange));
+    color: #222;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 6px 10px;
+}
+
 .linea-total {
     border-top: 2px solid var(--color-accent);
     padding-top: 15px;

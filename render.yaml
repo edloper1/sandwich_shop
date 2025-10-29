@@ -12,6 +12,8 @@ services:
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: SANDWICH_SHOP.settings
+      - key: PYTHONPATH
+        value: /opt/render/project/src
       - key: PYTHON_VERSION
         value: 3.12.6
       - key: SECRET_KEY

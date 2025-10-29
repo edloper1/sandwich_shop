@@ -28,11 +28,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-it4&qc-wj!3l)09sy#al0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.vercel.app', '.now.sh', '.onrender.com']
 
 # Add any custom domain here if you have one
 if 'VERCEL_URL' in os.environ:
     ALLOWED_HOSTS.append(os.environ['VERCEL_URL'])
+
+# Render despliega con un hostname dinámico en RENDER_EXTERNAL_HOSTNAME
+if 'RENDER_EXTERNAL_HOSTNAME' in os.environ:
+    ALLOWED_HOSTS.append(os.environ['RENDER_EXTERNAL_HOSTNAME'])
 
 
 # Application definition
@@ -62,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'sandwich_shop.urls'
+ROOT_URLCONF = 'SANDWICH_SHOP.urls'
 
 TEMPLATES = [
     {
@@ -79,7 +83,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'sandwich_shop.wsgi.application'
+WSGI_APPLICATION = 'SANDWICH_SHOP.wsgi.application'
 
 
 # Database

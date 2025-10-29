@@ -4,28 +4,7 @@
 {% block title %}{{ titulo }} - BugHunter Shop{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="fade-in-up">Los Mejores Sándwiches de la Ciudad</h1>
-                <p class="fade-in-up">Ingredientes frescos, sabores únicos y preparación artesanal. Descubre nuestra deliciosa selección de sándwiches gourmet.</p>
-                <div class="fade-in-up">
-                    <a href="{% url 'productos:catalogo' %}" class="btn btn-primary btn-lg me-3">Ver Catálogo</a>
-                    <a href="#destacados" class="btn btn-outline-light btn-lg">Productos Destacados</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="text-center">
-                    {% if productos_destacados.first.imagen %}
-                        <img src="{{ productos_destacados.first.imagen.url }}" alt="Sandwich destacado" class="img-fluid rounded shadow" style="max-height: 400px;">
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <!-- Categorías -->
 <section class="py-5">

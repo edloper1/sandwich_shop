@@ -135,6 +135,15 @@ $(document).ready(function() {
             }
         }, 300);
     });
+
+    // Marcar pestaña activa en la navegación (mejora UX)
+    const path = window.location.pathname;
+    $('.navbar-nav .nav-link').each(function() {
+        const href = $(this).attr('href');
+        if (href && path.startsWith(href)) {
+            $(this).addClass('active');
+        }
+    });
 });
 
 // Función para actualizar contador del carrito

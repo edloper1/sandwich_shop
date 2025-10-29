@@ -17,14 +17,20 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="site-ui">
+    <a class="visually-hidden-focusable" href="#main-content">Saltar al contenido</a>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'productos:inicio' %}">
-                <i class="bi bi-bug-fill logo-icon me-2"></i>
+                <img src="/media/Nproductos/logo.jpg" class="logo-img me-2" alt="logo">
                 BugHunter Shop
             </a>
+
+            <form class="d-flex ms-3 navbar-search" role="search" id="search-form" action="{% url 'productos:catalogo' %}" method="get">
+                <input id="search-input" name="q" class="form-control me-2" type="search" placeholder="Buscar sándwiches, ingredientes..." aria-label="Buscar">
+                <button class="btn btn-outline-light btn-search" type="submit"><i class="bi bi-search"></i></button>
+            </form>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -96,7 +102,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-bug-fill logo-icon me-2"></i>
+                        <img src="/media/Nproductos/logo.jpg" class="logo-img me-2" alt="logo">
                         <h5 class="mb-0">BugHunter</h5>
                     </div>
                     <p>Los mejores sándwiches de la ciudad, preparados con amor y los ingredientes más frescos.</p>

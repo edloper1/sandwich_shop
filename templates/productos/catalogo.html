@@ -106,16 +106,15 @@
         {% for producto in productos %}
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card producto-card h-100">
-                {% if producto.imagen %}
-                    <img src="{{ producto.imagen.url }}" 
-                         class="card-img-top" 
-                         alt="{{ producto.nombre }}"
-                         loading="lazy">
+                {# Mostrar imágenes fijas 1-4 de media/Nproductos según el índice del producto (mostramos solo 4 productos) #}
+                {% if forloop.counter == 1 %}
+                    <img src="/media/Nproductos/1.jpg" class="card-img-top" alt="{{ producto.nombre }}" loading="lazy">
+                {% elif forloop.counter == 2 %}
+                    <img src="/media/Nproductos/2.jpg" class="card-img-top" alt="{{ producto.nombre }}" loading="lazy">
+                {% elif forloop.counter == 3 %}
+                    <img src="/media/Nproductos/3.jpg" class="card-img-top" alt="{{ producto.nombre }}" loading="lazy">
                 {% else %}
-                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
-                         style="height: 250px;">
-                        <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
-                    </div>
+                    <img src="/media/Nproductos/4.jpg" class="card-img-top" alt="{{ producto.nombre }}" loading="lazy">
                 {% endif %}
                 
                 <div class="card-body d-flex flex-column">

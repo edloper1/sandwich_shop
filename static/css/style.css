@@ -461,6 +461,25 @@ body {
     .main-content {
         padding-top: 70px;
     }
+
+    /* Alineación del contador del carrito en móviles: impedir que se separe del icono */
+    .navbar-custom .nav-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem; /* espacio entre icono/texto y badge */
+    }
+
+    /* Forzar que el badge aparezca junto al icono y no en posición absoluta fuera del flujo */
+    .navbar-custom .nav-link #cart-count,
+    .navbar-custom .nav-link .badge#cart-count {
+        position: static !important;
+        transform: none !important;
+        top: auto !important;
+        left: auto !important;
+        margin-left: 0.15rem;
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
 
 /* Loading spinner */

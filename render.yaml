@@ -11,7 +11,7 @@ services:
       gunicorn SANDWICH_SHOP.wsgi:application --workers 3 --threads 2 --timeout 120
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: SANDWICH_SHOP.settings
+        value: sandwich_shop.settings
       - key: PYTHONPATH
         value: /opt/render/project/src
       - key: PYTHON_VERSION

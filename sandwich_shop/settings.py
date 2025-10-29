@@ -66,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'SANDWICH_SHOP.urls'
+ROOT_URLCONF = 'sandwich_shop.urls'
 
 TEMPLATES = [
     {
@@ -83,7 +83,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'SANDWICH_SHOP.wsgi.application'
+WSGI_APPLICATION = 'sandwich_shop.wsgi.application'
 
 
 # Database
